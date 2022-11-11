@@ -190,14 +190,14 @@ namespace SWEB.Controllers
                         }
                         break;
                     }
-                    Console.WriteLine("text->" + text);
-                    Console.WriteLine("text current->" + text[current]);
+                    //Console.WriteLine("text->" + text);
+                    //Console.WriteLine("text current->" + text[current]);
                     if (text[current] == '?' && Path.Equals(string.Empty))
                     {
-                        Console.WriteLine("current->Path->" + text.Remove(current));
+                        //Console.WriteLine("current->Path->" + text.Remove(current));
                         Path = text.Remove(current);
                         text = text.Substring(current);
-                        Console.WriteLine("local->Path->" + Path);
+                        //Console.WriteLine("local->Path->" + Path);
                         for (int j = 0; j < text.Length; j++)
                         {
                             if(text[j] == '#')
@@ -254,6 +254,76 @@ namespace SWEB.Controllers
                 result = AddtoDirectory(result, files[i], currentPath);
             }
             return new JsonResult(result);
+        }
+
+        [HttpPost]
+        public IActionResult FindExclusive(int[][] numbers)
+        {
+            List<int> unique = new List<int>();
+            List<int> notUnique = new List<int>();
+            for (int i = 0; i < numbers.Length; i++)
+            {
+                if(unique.IndexOf(numbers[i][0]) == -1)
+                {
+                    unique.Add(numbers[i][0]);
+                }             
+            }
+            for (int i = 0; i < numbers.Length; i++)
+            {
+                for (int j = 1; j < numbers[i].Length; j++)
+                {
+                    if (unique.IndexOf(numbers[i][j]) == -1)
+                    {
+                        if(notUnique.IndexOf(numbers[i][j]) == -1)
+                        {
+                            notUnique.Add(numbers[i][j]);
+                        }
+                    }
+                }
+            }
+            return new JsonResult(notUnique);
+        }
+
+        [HttpPost]
+        public IActionResult FindCommon(int[][] numbers)
+        {
+            List<int> twoWay = new List<int>();
+            for(int i = 0; i < numbers.Length; i++)
+            {
+                if (twoWay.IndexOf(numbers[i][0]) == -1)
+                {
+                    for (int j = 0; j < numbers.Length; j++)
+                    {
+                        Console.Write(numbers[i][0]);
+                        Console.Write(numbers[j][1]);
+                        if(numbers[i][0] == numbers[j][1])
+                        {
+                            twoWay.Add(numbers[i][0]);
+                        }
+                    }
+                    
+                }
+            }
+
+            return new JsonResult(twoWay);
+        }
+
+        [HttpPost]
+        public IActionResult FindAll(int[][] numbers)
+        {
+            List<int> all = new List<int>();
+            for (int i = 0; i < numbers.Length; i++)
+            {
+                for (int j = 0; j < numbers[i].Length; j++)
+                {
+                    if (all.IndexOf(numbers[i][j]) == -1)
+                    {
+                        all.Add(numbers[i][j]);
+                    }
+                }
+                
+            }
+            return new JsonResult(all);
         }
 
 
